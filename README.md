@@ -4,62 +4,68 @@
 
 ### 项目简介
 
-这个仓库用于记录我学习《C++ Primer Plus》过程中手动编写和整理的书中“程序清单”代码。项目使用 CMake 管理多个独立的 C++ 示例程序，并主要在 CLion 中编写、构建和运行。
+这个仓库用于记录我学习《C++ Primer Plus》过程中手动整理和编写的书中“程序清单”代码。
 
-当前仓库仅记录书中的程序清单代码，不包含课后练习、复习题、编程练习或书籍原文内容。
+当前仓库仅记录书里的程序清单代码，不涉及课后练习、复习题、编程练习答案，也不包含书籍原文、PDF、扫描件或其他受版权保护的材料。
 
-### 内容范围
+### 目录范式
 
-- 收录范围：书中出现的程序清单代码。
-- 暂不收录：课后练习、复习题、编程练习答案。
-- 不包含：书籍 PDF、扫描件、章节原文或其他受版权保护的材料。
-
-### 项目结构
-
-目录结构按照章节划分。每个章节目录中，文件名采用以下固定格式：
+仓库按章节组织，每个章节使用一个独立目录：
 
 ```text
-章节内序号_程序名.cpp
+Chapter<章节号> <章节英文标题>/
+```
+
+章节目录中包含：
+
+```text
+<程序清单编号>_<程序名>.cpp
+CMakeLists.txt
 ```
 
 例如：
 
 ```text
-2.1_myfirst.cpp
-2.2_carrots.cpp
+Chapter3 Dealing with Data/
+|-- 3.1_limits.cpp
+|-- 3.2_exceed.cpp
+`-- CMakeLists.txt
 ```
 
-当前结构：
+根目录只保留项目级文件：
 
 ```text
 C++PrimePlus/
 |-- Chapter2 Getting Started with C++/
-|   |-- 2.1_myfirst.cpp
-|   |-- 2.2_carrots.cpp
-|   |-- 2.3_getinfo.cpp
-|   |-- 2.4_sqrt.cpp
-|   |-- 2.5_ourfunc.cpp
-|   `-- 2.6_convert.cpp
+|-- Chapter3 Dealing with Data/
 |-- CMakeLists.txt
 |-- LICENSE
 |-- README.md
-|-- main.cpp
 |-- .clang-format
 `-- .gitignore
 ```
 
-### CMake 构建目标
+### CMake 组织方式
 
-每个程序清单通常对应一个独立的 CMake 可执行目标。
+根目录 `CMakeLists.txt` 只负责项目配置和引入章节目录：
 
-| 源文件 | CMake 目标 |
-| --- | --- |
-| `2.1_myfirst.cpp` | `myfirst` |
-| `2.2_carrots.cpp` | `carrots` |
-| `2.3_getinfo.cpp` | `getinfo` |
-| `2.4_sqrt.cpp` | `sqrt` |
-| `2.5_ourfunc.cpp` | `ourfunc` |
-| `2.6_convert.cpp` | `convert` |
+```cmake
+add_subdirectory("Chapter2 Getting Started with C++")
+add_subdirectory("Chapter3 Dealing with Data")
+```
+
+每个章节目录下的 `CMakeLists.txt` 负责声明该章节的程序清单可执行目标。例如：
+
+```cmake
+add_executable(limits 3.1_limits.cpp)
+add_executable(exceed 3.2_exceed.cpp)
+```
+
+这样后续新增程序清单时，通常只需要：
+
+- 在对应章节目录中添加新的 `.cpp` 文件。
+- 在该章节的 `CMakeLists.txt` 中添加对应的 `add_executable(...)`。
+- 只有新增章节目录、调整目录规范或修改仓库说明时，才需要更新本 README。
 
 ### 构建环境
 
@@ -76,12 +82,18 @@ cmake -S . -B build
 cmake --build build
 ```
 
-也可以在 CLion 中直接打开项目根目录，等待 CMake 加载完成后选择对应的运行目标。
+在 CLion 中，可以直接打开项目根目录，等待 CMake 加载完成后选择对应的运行目标。
 
-### 当前进度
+### 当前收录范围
 
-- Chapter 2: Getting Started with C++
-  - 已记录程序清单 2.1 至 2.6。
+目前已开始整理以下章节的程序清单：
+
+| 章节目录 | 内容 |
+| --- | --- |
+| `Chapter2 Getting Started with C++/` | Chapter 2: Getting Started with C++ |
+| `Chapter3 Dealing with Data/` | Chapter 3: Dealing with Data |
+
+具体程序清单文件和可执行目标，以各章节目录中的 `.cpp` 文件和 `CMakeLists.txt` 为准。
 
 ### 仓库维护规范
 
@@ -89,7 +101,7 @@ cmake --build build
 - 不提交本地构建目录，例如 `cmake-build-debug/`、`build/`、`out/`。
 - 不提交编译产物，例如 `.exe`、`.obj`、`.o`。
 - 不提交本地 IDE 配置目录，例如 `.idea/`。
-- 新增程序清单时，同步更新 `CMakeLists.txt` 和 README 中的目录与目标表。
+- README 尽量保持为长期说明文档，不为每个新增程序清单频繁修改。
 
 ### 版权说明
 
@@ -101,62 +113,68 @@ cmake --build build
 
 ### Project Overview
 
-This repository records the program listing code that I manually write and organize while studying *C++ Primer Plus*. The project uses CMake to manage multiple independent C++ example programs and is mainly written, built, and run in CLion.
+This repository records the program listing code that I manually organize and write while studying *C++ Primer Plus*.
 
-At this stage, this repository only contains program listings from the book. It does not include end-of-chapter exercises, review questions, programming exercise solutions, or original book text.
+At this stage, this repository only contains program listings from the book. It does not include end-of-chapter exercises, review questions, programming exercise answers, original book text, PDFs, scans, or other copyrighted materials.
 
-### Content Scope
+### Directory Convention
 
-- Included: program listing code from the book.
-- Not included for now: end-of-chapter exercises, review questions, or programming exercise answers.
-- Excluded: book PDFs, scans, chapter text, or other copyrighted materials.
-
-### Project Structure
-
-The directory structure is organized by chapter. Inside each chapter directory, file names follow this fixed format:
+The repository is organized by chapter. Each chapter uses an independent directory:
 
 ```text
-chapter-listing-number_program-name.cpp
+Chapter<chapter-number> <chapter-title>/
+```
+
+Each chapter directory contains:
+
+```text
+<program-listing-number>_<program-name>.cpp
+CMakeLists.txt
 ```
 
 For example:
 
 ```text
-2.1_myfirst.cpp
-2.2_carrots.cpp
+Chapter3 Dealing with Data/
+|-- 3.1_limits.cpp
+|-- 3.2_exceed.cpp
+`-- CMakeLists.txt
 ```
 
-Current structure:
+The root directory only keeps project-level files:
 
 ```text
 C++PrimePlus/
 |-- Chapter2 Getting Started with C++/
-|   |-- 2.1_myfirst.cpp
-|   |-- 2.2_carrots.cpp
-|   |-- 2.3_getinfo.cpp
-|   |-- 2.4_sqrt.cpp
-|   |-- 2.5_ourfunc.cpp
-|   `-- 2.6_convert.cpp
+|-- Chapter3 Dealing with Data/
 |-- CMakeLists.txt
 |-- LICENSE
 |-- README.md
-|-- main.cpp
 |-- .clang-format
 `-- .gitignore
 ```
 
-### CMake Build Targets
+### CMake Organization
 
-Each program listing usually corresponds to an independent CMake executable target.
+The root `CMakeLists.txt` only handles project-level configuration and includes chapter directories:
 
-| Source File | CMake Target |
-| --- | --- |
-| `2.1_myfirst.cpp` | `myfirst` |
-| `2.2_carrots.cpp` | `carrots` |
-| `2.3_getinfo.cpp` | `getinfo` |
-| `2.4_sqrt.cpp` | `sqrt` |
-| `2.5_ourfunc.cpp` | `ourfunc` |
-| `2.6_convert.cpp` | `convert` |
+```cmake
+add_subdirectory("Chapter2 Getting Started with C++")
+add_subdirectory("Chapter3 Dealing with Data")
+```
+
+Each chapter-level `CMakeLists.txt` declares the executable targets for that chapter's program listings. For example:
+
+```cmake
+add_executable(limits 3.1_limits.cpp)
+add_executable(exceed 3.2_exceed.cpp)
+```
+
+With this structure, adding a new program listing usually only requires:
+
+- Adding a new `.cpp` file to the corresponding chapter directory.
+- Adding the matching `add_executable(...)` entry to that chapter's `CMakeLists.txt`.
+- Updating this README only when adding a new chapter, changing the directory convention, or changing the repository description.
 
 ### Build Environment
 
@@ -173,12 +191,18 @@ cmake -S . -B build
 cmake --build build
 ```
 
-You can also open the project root directory directly in CLion, wait for CMake to finish loading, and then select the target you want to run.
+In CLion, open the project root directory directly, wait for CMake to finish loading, and then select the target you want to run.
 
-### Current Progress
+### Current Scope
 
-- Chapter 2: Getting Started with C++
-  - Program listings 2.1 to 2.6 have been recorded.
+The following chapters have been started:
+
+| Chapter Directory | Content |
+| --- | --- |
+| `Chapter2 Getting Started with C++/` | Chapter 2: Getting Started with C++ |
+| `Chapter3 Dealing with Data/` | Chapter 3: Dealing with Data |
+
+The exact program listing files and executable targets are defined by the `.cpp` files and `CMakeLists.txt` inside each chapter directory.
 
 ### Repository Maintenance Rules
 
@@ -186,7 +210,7 @@ You can also open the project root directory directly in CLion, wait for CMake t
 - Do not commit local build directories such as `cmake-build-debug/`, `build/`, and `out/`.
 - Do not commit compiled artifacts such as `.exe`, `.obj`, and `.o`.
 - Do not commit local IDE configuration directories such as `.idea/`.
-- When adding a new program listing, update both `CMakeLists.txt` and the directory/target sections in this README.
+- Keep this README as long-term documentation and avoid updating it for every newly added program listing.
 
 ### Copyright Notice
 
